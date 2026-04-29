@@ -480,51 +480,147 @@ body {
 // 資料設定區（Apps Script 自動更新這個區塊）
 // ══════════════════════════════════════════════════════════
 const DATA = {
-  updateTime: "2026/04/29 18:00",
-  totalTasks: 28,
-  doneTasks: 4,
-  inProgTasks: 3,
-  riskHigh: 3,
-  riskMid: 5,
-  daysLeft: 230,
-  currentPhase: "需求訪談（S1）",
-
-  milestones: [
-    { name: "合約簽署完成",        date: "05/08", status: "done" },
-    { name: "Kick-off 完成",        date: "05/19", status: "inprog" },
-    { name: "需求訪談全數完成",     date: "06/13", status: "todo" },
-    { name: "需求規格書雙方簽核",   date: "07/11", status: "todo" },
-    { name: "分析設計完成",         date: "08/15", status: "todo" },
-    { name: "開發建置完成",         date: "09/30", status: "todo" },
-    { name: "UAT 完成",             date: "10/31", status: "todo" },
-    { name: "薪資平行測試完成",     date: "12/15", status: "todo" },
-    { name: "正式上線 Go-Live",     date: "12/15", status: "todo" },
+  "updateTime": "2026/04/29 15:58",
+  "totalTasks": 28,
+  "doneTasks": 2,
+  "inProgTasks": 2,
+  "riskHigh": 3,
+  "riskMid": 5,
+  "daysLeft": 230,
+  "currentPhase": "需求訪談（S1）",
+  "milestones": [
+    {
+      "name": "合約簽署完成",
+      "date": "05/08",
+      "status": "todo"
+    },
+    {
+      "name": "Kick-off 完成",
+      "date": "05/19",
+      "status": "todo"
+    },
+    {
+      "name": "需求訪談全數完成",
+      "date": "06/13",
+      "status": "todo"
+    },
+    {
+      "name": "需求規格書雙方簽核",
+      "date": "07/11",
+      "status": "todo"
+    },
+    {
+      "name": "分析設計完成",
+      "date": "08/15",
+      "status": "todo"
+    },
+    {
+      "name": "開發建置完成",
+      "date": "09/30",
+      "status": "todo"
+    },
+    {
+      "name": "UAT 完成",
+      "date": "10/31",
+      "status": "todo"
+    },
+    {
+      "name": "薪資平行測試完成",
+      "date": "12/15",
+      "status": "todo"
+    },
+    {
+      "name": "正式上線 Go-Live",
+      "date": "12/15",
+      "status": "todo"
+    }
   ],
-
-  risks: [
-    { level: "高", desc: "組織/簽核邏輯訪談範圍龐大，需求確認時程恐延誤", owner: "HR數位組 × 逐鹿顧問" },
-    { level: "高", desc: "海外據點薪資規則尚未完成盤點", owner: "HR薪資組" },
-    { level: "高", desc: "舊系統資料格式不明，遷移工作量待確認", owner: "IT × 逐鹿" },
-    { level: "中", desc: "HR窗口UAT時間不足，驗收恐拉長", owner: "HR數位組" },
-    { level: "中", desc: "AD/SSO整合驗證時間不足", owner: "IT窗口" },
+  "risks": [
+    {
+      "level": "高",
+      "desc": "組織/簽核邏輯訪談範圍龐大，需求確認時程恐延誤",
+      "owner": "HR數位組"
+    },
+    {
+      "level": "高",
+      "desc": "海外據點薪資規則未完成盤點",
+      "owner": "HR薪資組"
+    },
+    {
+      "level": "高",
+      "desc": "舊系統資料格式不明，遷移工作量超出預期",
+      "owner": "HR數位組/IT"
+    },
+    {
+      "level": "中",
+      "desc": "HR窗口UAT時間不足",
+      "owner": "HR數位組"
+    },
+    {
+      "level": "中",
+      "desc": "AD/SSO整合驗證時間不足",
+      "owner": "IT窗口"
+    }
   ],
-
-  currentTasks: [
-    { name: "組織管理/簽核邏輯訪談",   owner: "HR人事組",  date: "05/30", status: "inprog" },
-    { name: "專案管理計畫書（PMP）",   owner: "逐鹿PM",    date: "05/19", status: "inprog" },
-    { name: "測試/開發環境建置",       owner: "IT/逐鹿",   date: "05/23", status: "inprog" },
-    { name: "薪資規則訪談準備",        owner: "HR薪資組",  date: "06/06", status: "todo" },
-    { name: "考勤/班表訪談準備",       owner: "HR考勤組",  date: "06/06", status: "todo" },
+  "currentTasks": [
+    {
+      "name": "專案管理計畫書（PMP）",
+      "owner": "逐鹿PM",
+      "date": "05/19",
+      "status": "inprog"
+    },
+    {
+      "name": "測試/開發環境建置",
+      "owner": "IT窗口/逐鹿",
+      "date": "05/23",
+      "status": "todo"
+    },
+    {
+      "name": "組織管理/簽核邏輯訪談",
+      "owner": "HR人事組/逐鹿",
+      "date": "05/30",
+      "status": "inprog"
+    },
+    {
+      "name": "薪資規則訪談",
+      "owner": "HR薪資組/逐鹿",
+      "date": "06/06",
+      "status": "todo"
+    },
+    {
+      "name": "考勤/班表訪談",
+      "owner": "HR考勤組/逐鹿",
+      "date": "06/06",
+      "status": "todo"
+    }
   ],
-
-  modules: [
-    { name: "組織管理",   pct: 20 },
-    { name: "人員數據",   pct: 0  },
-    { name: "薪資福利",   pct: 0  },
-    { name: "考勤班表",   pct: 0  },
-    { name: "自助服務",   pct: 0  },
-    { name: "系統整合",   pct: 0  },
+  "modules": [
+    {
+      "name": "需求訪談",
+      "pct": 0
+    },
+    {
+      "name": "薪資福利",
+      "pct": 0
+    },
+    {
+      "name": "考勤班表",
+      "pct": 0
+    },
+    {
+      "name": "組織管理",
+      "pct": 0
+    },
+    {
+      "name": "自助服務",
+      "pct": 0
+    },
+    {
+      "name": "系統整合",
+      "pct": 0
+    }
   ],
+  "lineMsg": "【HRIS 進度週報 2026/04/29】\n━━━━━━━━━━━━━━━\n整體完成度：7%\n已完成：2項　進行中：2項\n未開始：24項\n━━━━━━━━━━━━━━━\n高風險：3項　中風險：5項\n━━━━━━━━━━━━━━━\n儀表板：https://patricting.github.io/hris-dashboard/hris_dashboard.html"
 };
 
 // ══════════════════════════════════════════════════════════
