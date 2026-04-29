@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>雄獅集團 HRIS 導入專案儀表板</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:    #1F3864;
+  --blue:    #2E75B6;
+  --lt-blue: #EBF5FB;
+  --teal:    #1D6A72;
+  --green:   #1A7C4A;
+  --lt-green:#E8F5EE;
+  --amber:   #B45309;
+  --lt-amber:#FFFBEB;
+  --red:     #B91C1C;
+  --lt-red:  #FEF2F2;
+  --gray:    #6B7280;
+  --lt-gray: #F9FAFB;
+  --border:  #E5E7EB;
+  --text:    #111827;
+  --text2:   #6B7280;
+  --white:   #FFFFFF;
+  --bg:      #F3F4F6;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ── 頂部導覽列 ── */
+.topbar {
+  background: var(--navy);
+  padding: 0 32px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.topbar-left { display: flex; align-items: center; gap: 16px; }
+.topbar-logo {
+  width: 32px; height: 32px;
+  background: #C8102E;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; color: white; font-size: 14px;
+}
+.topbar-title { color: white; font-size: 15px; font-weight: 500; }
+.topbar-sub { color: #93B8D8; font-size: 12px; margin-top: 2px; }
+.topbar-right { display: flex; align-items: center; gap: 16px; }
+.update-badge {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 20px;
+  padding: 4px 12px;
+  color: #93B8D8;
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+}
+.copy-line-btn {
+  background: #C8102E;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  color: white;
+  font-size: 12px;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.copy-line-btn:hover { background: #a00d26; }
+
+/* ── 主體內容 ── */
+.main { padding: 24px 32px; max-width: 1400px; margin: 0 auto; }
+
+/* ── 階段進度條 ── */
+.phase-section { margin-bottom: 20px; }
+.phase-bar {
+  display: flex;
+  gap: 4px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  align-items: center;
+}
+.phase-label { font-size: 11px; color: var(--text2); margin-right: 8px; white-space: nowrap; }
+.phase-items { display: flex; gap: 4px; flex: 1; }
+.phase-item {
+  flex: 1;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+}
+.phase-done { background: var(--lt-green); color: var(--green); }
+.phase-now  { background: var(--lt-amber); color: var(--amber); }
+.phase-todo { background: var(--lt-gray);  color: var(--gray); }
+
+/* ── 指標卡片 ── */
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.metric-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s;
+}
+.metric-card:hover { transform: translateY(-2px); }
+.metric-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.metric-card.blue::before  { background: var(--blue); }
+.metric-card.green::before { background: var(--green); }
+.metric-card.amber::before { background: var(--amber); }
+.metric-card.red::before   { background: var(--red); }
+.metric-label { font-size: 12px; color: var(--text2); margin-bottom: 10px; font-weight: 400; }
+.metric-value { font-size: 36px; font-weight: 700; line-height: 1; margin-bottom: 8px; }
+.metric-value.blue  { color: var(--blue); }
+.metric-value.green { color: var(--green); }
+.metric-value.amber { color: var(--amber); }
+.metric-value.red   { color: var(--red); }
+.metric-sub { font-size: 12px; color: var(--text2); }
+.progress-track {
+  height: 4px;
+  background: var(--lt-gray);
+  border-radius: 2px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--blue);
+  transition: width 1s ease;
+}
+
+/* ── 主要內容區 ── */
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.content-grid.three {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.card-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.card-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+}
+.card-badge {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+.card-body { padding: 0; }
+
+/* ── 里程碑列表 ── */
+.ms-list { padding: 4px 0; }
+.ms-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.1s;
+}
+.ms-item:last-child { border-bottom: none; }
+.ms-item:hover { background: var(--lt-gray); }
+.ms-pill {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 7px;
+  border-radius: 8px;
+  white-space: nowrap;
+  min-width: 56px;
+  text-align: center;
+}
+.pill-green { background: var(--lt-green); color: var(--green); }
+.pill-amber { background: var(--lt-amber); color: var(--amber); }
+.pill-red   { background: var(--lt-red);   color: var(--red); }
+.pill-gray  { background: var(--lt-gray);  color: var(--gray); border: 1px solid var(--border); }
+.ms-name { flex: 1; font-size: 13px; color: var(--text); }
+.ms-date { font-size: 11px; color: var(--text2); font-family: 'DM Mono', monospace; }
+
+/* ── 風險列表 ── */
+.risk-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.risk-item:last-child { border-bottom: none; }
+.risk-level {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  margin-top: 1px;
+}
+.level-high { background: var(--lt-red);   color: var(--red); }
+.level-mid  { background: var(--lt-amber); color: var(--amber); }
+.risk-desc { font-size: 12px; color: var(--text); line-height: 1.5; flex: 1; }
+.risk-owner { font-size: 11px; color: var(--text2); margin-top: 3px; }
+
+/* ── 任務進度 ── */
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 18px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+.task-item:last-child { border-bottom: none; }
+.task-name { flex: 1; color: var(--text); }
+.task-owner { color: var(--text2); min-width: 80px; font-size: 11px; }
+.task-date  { color: var(--text2); min-width: 58px; text-align: right;
+              font-family: 'DM Mono', monospace; font-size: 11px; }
+
+/* ── LINE訊息區 ── */
+.line-card { background: white; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.line-header {
+  padding: 14px 18px;
+  background: #06C755;
+  display: flex; align-items: center; gap: 8px;
+}
+.line-icon {
+  width: 20px; height: 20px;
+  background: white;
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: #06C755;
+}
+.line-header-title { color: white; font-size: 13px; font-weight: 500; }
+.line-body { padding: 16px 18px; }
+.line-msg-box {
+  background: #F0F4F8;
+  border-radius: 8px;
+  padding: 14px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  line-height: 1.9;
+  color: #2D3748;
+  white-space: pre-line;
+  margin-bottom: 12px;
+}
+.line-copy-btn {
+  width: 100%;
+  padding: 10px;
+  background: #06C755;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 13px;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.line-copy-btn:hover { background: #05a848; }
+.line-copy-btn.copied { background: var(--green); }
+
+/* ── 模組完成度 ── */
+.module-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+.module-item:last-child { border-bottom: none; }
+.module-name { min-width: 90px; color: var(--text); }
+.module-track { flex: 1; height: 8px; background: var(--lt-gray); border-radius: 4px; overflow: hidden; }
+.module-fill  { height: 8px; border-radius: 4px; background: var(--blue); transition: width 1s ease; }
+.module-pct   { min-width: 32px; text-align: right; color: var(--text2);
+                font-family: 'DM Mono', monospace; font-weight: 500; }
+
+/* ── 頁尾 ── */
+.footer {
+  text-align: center;
+  padding: 24px;
+  font-size: 11px;
+  color: var(--text2);
+  font-family: 'DM Mono', monospace;
+}
+
+/* ── 動畫 ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.metric-card { animation: fadeUp 0.4s ease both; }
+.metric-card:nth-child(1) { animation-delay: 0.05s; }
+.metric-card:nth-child(2) { animation-delay: 0.10s; }
+.metric-card:nth-child(3) { animation-delay: 0.15s; }
+.metric-card:nth-child(4) { animation-delay: 0.20s; }
+
+/* ── 響應式 ── */
+@media (max-width: 900px) {
+  .main { padding: 16px; }
+  .metrics-row { grid-template-columns: repeat(2, 1fr); }
+  .content-grid { grid-template-columns: 1fr; }
+  .content-grid.three { grid-template-columns: 1fr; }
+  .phase-items { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<!-- 頂部導覽列 -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-logo">獅</div>
+    <div>
+      <div class="topbar-title">雄獅集團 HRIS 導入專案儀表板</div>
+      <div class="topbar-sub">逐鹿數位 × 雄獅旅遊 ｜ 2026/05 – 2026/12</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="update-badge">資料更新：<span id="update-time">載入中</span></div>
+    <button class="copy-line-btn" onclick="copyLineMsg()">複製 LINE 週報</button>
+  </div>
+</div>
+
+<!-- 主體 -->
+<div class="main">
+
+  <!-- 階段進度條 -->
+  <div class="phase-section">
+    <div class="phase-bar">
+      <div class="phase-label">專案階段</div>
+      <div class="phase-items">
+        <div class="phase-item phase-done">S0 簽約啟動 ✓</div>
+        <div class="phase-item phase-now">S1 需求訪談 ▶</div>
+        <div class="phase-item phase-todo">S2 分析設計</div>
+        <div class="phase-item phase-todo">S3 開發建置</div>
+        <div class="phase-item phase-todo">S4 測試驗收</div>
+        <div class="phase-item phase-todo">S6 上線保固</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 指標卡片 -->
+  <div class="metrics-row">
+    <div class="metric-card blue">
+      <div class="metric-label">整體完成度</div>
+      <div class="metric-value blue" id="overall-pct">—</div>
+      <div class="progress-track">
+        <div class="progress-fill" id="pct-bar" style="width:0%"></div>
+      </div>
+      <div class="metric-sub" id="task-summary">載入中</div>
+    </div>
+    <div class="metric-card green">
+      <div class="metric-label">已完成任務</div>
+      <div class="metric-value green" id="done-count">—</div>
+      <div class="metric-sub" id="total-count">共 — 項任務</div>
+    </div>
+    <div class="metric-card amber">
+      <div class="metric-label">高風險事項</div>
+      <div class="metric-value amber" id="risk-high">—</div>
+      <div class="metric-sub" id="risk-mid-text">中風險 — 項</div>
+    </div>
+    <div class="metric-card red">
+      <div class="metric-label">距離上線</div>
+      <div class="metric-value red" id="days-left">—</div>
+      <div class="metric-sub">天 ｜ 預計 2026/12/15</div>
+    </div>
+  </div>
+
+  <!-- 里程碑 + 風險 -->
+  <div class="content-grid" style="margin-bottom:16px">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">里程碑狀態</div>
+      </div>
+      <div class="card-body">
+        <div class="ms-list" id="milestone-list">
+          <!-- 動態產生 -->
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">風險清單</div>
+        <div class="card-badge pill-red" id="risk-badge">高風險 — 項</div>
+      </div>
+      <div class="card-body" id="risk-list">
+        <!-- 動態產生 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 本週待辦 + 模組進度 + LINE -->
+  <div class="content-grid three">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">本週關鍵任務</div>
+        <div class="card-badge" style="background:var(--lt-amber);color:var(--amber)" id="inprog-badge">進行中 — 項</div>
+      </div>
+      <div class="card-body" id="task-list">
+        <!-- 動態產生 -->
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">各模組完成度</div>
+      </div>
+      <div class="card-body" id="module-list">
+        <!-- 動態產生 -->
+      </div>
+    </div>
+
+    <div class="line-card">
+      <div class="line-header">
+        <div class="line-icon">L</div>
+        <div class="line-header-title">LINE 週報訊息</div>
+      </div>
+      <div class="line-body">
+        <div class="line-msg-box" id="line-msg">載入中...</div>
+        <button class="line-copy-btn" id="copy-btn" onclick="copyLineMsg()">
+          複製訊息，貼到 LINE 群組
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  雄獅集團 HRIS 導入專案儀表板 ｜ 資料來源：Google Sheets ｜
+  如有問題請聯繫 HR 數位發展組
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+// 資料設定區（Apps Script 自動更新這個區塊）
+// ══════════════════════════════════════════════════════════
+const DATA = {
+  updateTime: "2026/04/29 18:00",
+  totalTasks: 28,
+  doneTasks: 4,
+  inProgTasks: 3,
+  riskHigh: 3,
+  riskMid: 5,
+  daysLeft: 230,
+  currentPhase: "需求訪談（S1）",
+
+  milestones: [
+    { name: "合約簽署完成",        date: "05/08", status: "done" },
+    { name: "Kick-off 完成",        date: "05/19", status: "inprog" },
+    { name: "需求訪談全數完成",     date: "06/13", status: "todo" },
+    { name: "需求規格書雙方簽核",   date: "07/11", status: "todo" },
+    { name: "分析設計完成",         date: "08/15", status: "todo" },
+    { name: "開發建置完成",         date: "09/30", status: "todo" },
+    { name: "UAT 完成",             date: "10/31", status: "todo" },
+    { name: "薪資平行測試完成",     date: "12/15", status: "todo" },
+    { name: "正式上線 Go-Live",     date: "12/15", status: "todo" },
+  ],
+
+  risks: [
+    { level: "高", desc: "組織/簽核邏輯訪談範圍龐大，需求確認時程恐延誤", owner: "HR數位組 × 逐鹿顧問" },
+    { level: "高", desc: "海外據點薪資規則尚未完成盤點", owner: "HR薪資組" },
+    { level: "高", desc: "舊系統資料格式不明，遷移工作量待確認", owner: "IT × 逐鹿" },
+    { level: "中", desc: "HR窗口UAT時間不足，驗收恐拉長", owner: "HR數位組" },
+    { level: "中", desc: "AD/SSO整合驗證時間不足", owner: "IT窗口" },
+  ],
+
+  currentTasks: [
+    { name: "組織管理/簽核邏輯訪談",   owner: "HR人事組",  date: "05/30", status: "inprog" },
+    { name: "專案管理計畫書（PMP）",   owner: "逐鹿PM",    date: "05/19", status: "inprog" },
+    { name: "測試/開發環境建置",       owner: "IT/逐鹿",   date: "05/23", status: "inprog" },
+    { name: "薪資規則訪談準備",        owner: "HR薪資組",  date: "06/06", status: "todo" },
+    { name: "考勤/班表訪談準備",       owner: "HR考勤組",  date: "06/06", status: "todo" },
+  ],
+
+  modules: [
+    { name: "組織管理",   pct: 20 },
+    { name: "人員數據",   pct: 0  },
+    { name: "薪資福利",   pct: 0  },
+    { name: "考勤班表",   pct: 0  },
+    { name: "自助服務",   pct: 0  },
+    { name: "系統整合",   pct: 0  },
+  ],
+};
+
+// ══════════════════════════════════════════════════════════
+// 渲染函式
+// ══════════════════════════════════════════════════════════
+function render() {
+  const pct = Math.round(DATA.doneTasks / DATA.totalTasks * 100);
+
+  // 更新時間
+  document.getElementById('update-time').textContent = DATA.updateTime;
+
+  // 指標卡片
+  document.getElementById('overall-pct').textContent = pct + '%';
+  document.getElementById('pct-bar').style.width = pct + '%';
+  document.getElementById('task-summary').textContent =
+    `已完成 ${DATA.doneTasks} 項　進行中 ${DATA.inProgTasks} 項`;
+  document.getElementById('done-count').textContent = DATA.doneTasks;
+  document.getElementById('total-count').textContent = `共 ${DATA.totalTasks} 項任務`;
+  document.getElementById('risk-high').textContent = DATA.riskHigh;
+  document.getElementById('risk-mid-text').textContent = `中風險 ${DATA.riskMid} 項`;
+  document.getElementById('days-left').textContent = DATA.daysLeft;
+  document.getElementById('risk-badge').textContent = `高風險 ${DATA.riskHigh} 項`;
+  document.getElementById('inprog-badge').textContent = `進行中 ${DATA.inProgTasks} 項`;
+
+  // 里程碑
+  const msMap = {
+    done:   ['pill-green', '✓ 準時'],
+    inprog: ['pill-amber', '▶ 進行中'],
+    overdue:['pill-red',   '✗ 逾期'],
+    todo:   ['pill-gray',  '○ 未到期'],
+  };
+  document.getElementById('milestone-list').innerHTML =
+    DATA.milestones.map(m => {
+      const [cls, label] = msMap[m.status] || msMap.todo;
+      return `<div class="ms-item">
+        <span class="ms-pill ${cls}">${label}</span>
+        <span class="ms-name">${m.name}</span>
+        <span class="ms-date">${m.date}</span>
+      </div>`;
+    }).join('');
+
+  // 風險
+  document.getElementById('risk-list').innerHTML =
+    DATA.risks.map(r => `
+      <div class="risk-item">
+        <span class="risk-level level-${r.level === '高' ? 'high' : 'mid'}">${r.level}</span>
+        <div>
+          <div class="risk-desc">${r.desc}</div>
+          <div class="risk-owner">${r.owner}</div>
+        </div>
+      </div>`).join('');
+
+  // 本週任務
+  const stMap = {
+    inprog: ['pill-amber','進行中'],
+    todo:   ['pill-gray', '未開始'],
+    done:   ['pill-green','已完成'],
+  };
+  document.getElementById('task-list').innerHTML =
+    DATA.currentTasks.map(t => {
+      const [cls, label] = stMap[t.status] || stMap.todo;
+      return `<div class="task-item">
+        <span class="ms-pill ${cls}" style="min-width:52px">${label}</span>
+        <span class="task-name">${t.name}</span>
+        <span class="task-owner">${t.owner}</span>
+        <span class="task-date">${t.date}</span>
+      </div>`;
+    }).join('');
+
+  // 模組進度
+  document.getElementById('module-list').innerHTML =
+    DATA.modules.map(m => `
+      <div class="module-item">
+        <span class="module-name">${m.name}</span>
+        <div class="module-track">
+          <div class="module-fill" style="width:${m.pct}%"></div>
+        </div>
+        <span class="module-pct">${m.pct}%</span>
+      </div>`).join('');
+
+  // LINE訊息
+  const msg = `【HRIS 進度週報 ${DATA.updateTime.split(' ')[0]}】
+━━━━━━━━━━━━━━━
+整體完成度：${pct}%
+已完成：${DATA.doneTasks}項　進行中：${DATA.inProgTasks}項
+未開始：${DATA.totalTasks - DATA.doneTasks - DATA.inProgTasks}項
+━━━━━━━━━━━━━━━
+目前階段：${DATA.currentPhase}
+距離上線：${DATA.daysLeft} 天
+━━━━━━━━━━━━━━━
+風險：高 ${DATA.riskHigh} 項 / 中 ${DATA.riskMid} 項
+━━━━━━━━━━━━━━━
+儀表板：（請填入網址）`;
+
+  document.getElementById('line-msg').textContent = msg;
+  window._lineMsg = msg;
+}
+
+function copyLineMsg() {
+  const msg = window._lineMsg || document.getElementById('line-msg').textContent;
+  navigator.clipboard.writeText(msg).then(() => {
+    const btn = document.getElementById('copy-btn');
+    const top = document.querySelector('.copy-line-btn');
+    btn.textContent = '已複製！貼到 LINE 群組即可';
+    btn.classList.add('copied');
+    if(top) top.textContent = '✓ 已複製';
+    setTimeout(() => {
+      btn.textContent = '複製訊息，貼到 LINE 群組';
+      btn.classList.remove('copied');
+      if(top) top.textContent = '複製 LINE 週報';
+    }, 2500);
+  });
+}
+
+render();
+</script>
+</body>
+</html>
